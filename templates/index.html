@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医疗废物追溯系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #eef2f7;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            border-radius: 28px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            color: white;
+            box-shadow: 0 6px 16px rgba(26,115,232,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logo i {
+            background: white;
+            width: 52px;
+            height: 52px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #1a73e8;
+        }
+        .logo-text h1 {
+            font-size: 1.6rem;
+        }
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+            flex: 1;
+            min-width: 300px;
+        }
+        .card-head {
+            background: #f9fafc;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e9eef3;
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: #0b4f6c;
+        }
+        .card-head i {
+            margin-right: 8px;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            color: #1e3a5f;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+        }
+        label i {
+            width: 1.4rem;
+            color: #2c7da0;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            border: 1px solid #cfdfed;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            background: white;
+        }
+        .btn {
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0d47a1;
+        }
+        .btn-secondary {
+            background: #eef2f6;
+            color: #1e2a3a;
+            margin-top: 1rem;
+        }
+        .preview {
+            margin-top: 1.2rem;
+            background: #f8fafd;
+            border-radius: 20px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+        .preview img {
+            max-width: 100%;
+            max-height: 160px;
+            border-radius: 14px;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .info-item {
+            background: #f8fafc;
+            padding: 0.6rem;
+            border-radius: 18px;
+            border-left: 3px solid #1a73e8;
+        }
+        .info-label {
+            font-size: 0.7rem;
+            color: #5f7d9c;
+        }
+        .info-value {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #0a2540;
+        }
+        .qr-area {
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .qr-area img {
+            max-width: 120px;
+            border-radius: 12px;
+            background: white;
+            padding: 4px;
+            border: 1px solid #cbd5e1;
+        }
+        .loader {
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #1a73e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 0.7s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-box {
+            background: #ffe6e5;
+            color: #b91c1c;
+            padding: 0.8rem;
+            border-radius: 20px;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6c86a3;
+        }
+        @media (max-width: 700px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-hospital-user"></i>
+            <div class="logo-text">
+                <h1>医疗废物智慧追溯平台</h1>
+            </div>
+        </div>
+        <div class="badge">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card">
+            <div class="card-head">
+                <i class="fas fa-upload"></i> 废物登记
+            </div>
+            <div class="card-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label><i class="fas fa-camera"></i> 废物照片</label>
+                        <input type="file" name="image" id="imageFile" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-weight-hanging"></i> 重量 (克)</label>
+                        <input type="text" name="weight" placeholder="例如 45.2" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-building"></i> 科室</label>
+                        <input type="text" name="department" placeholder="手术室/门诊" value="门诊部">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user-md"></i> 操作人</label>
+                        <input type="text" name="operator" placeholder="姓名/工号" value="值班护士">
+                    </div>
+                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                        <i class="fas fa-brain"></i> 智能识别并记录
+                    </button>
+                </form>
+
+                <div id="previewArea" style="display: none;" class="preview">
+                    <p><i class="fas fa-image"></i> 预览</p>
+                    <img id="previewImg" src="#" alt="预览图">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <i class="fas fa-clipboard-list"></i> 识别结果 & 追溯码
+            </div>
+            <div class="card-body">
+                <div id="emptyState" style="text-align: center; color: #7f8c8d;">
+                    <i class="fas fa-hand-holding-heart" style="font-size: 2.2rem; margin-bottom: 0.5rem; display: block;"></i>
+                    <p>上传图片后点击识别<br>系统将生成追溯二维码</p>
+                </div>
+                <div id="resultPanel" style="display: none;">
+                    <div class="result-grid">
+                        <div class="info-item"><div class="info-label"><i class="fas fa-qrcode"></i> 记录编号</div><div class="info-value" id="recordId"></div></div>
+                        <div class="info-item"><div class="info-label"><i class="fas fa-trash-alt"></i> 废物类别</div><div class="info-value" id="category"></div></div>
+                        <div class="info-item"><div class="info-label"><i class="fas fa-chart-line"></i> AI置信度</div><div class="info-value" id="confidence"></div></div>
+                        <div class="info-item"><div class="info-label"><i class="fas fa-clock"></i> 处理时间</div><div class="info-value" id="time"></div></div>
+                        <div class="info-item"><div class="info-label"><i class="fas fa-weight"></i> 重量</div><div class="info-value" id="weightVal"></div></div>
+                        <div class="info-item"><div class="info-label"><i class="fas fa-hospital"></i> 科室</div><div class="info-value" id="deptVal"></div></div>
+                        <div class="info-item"><div class="info-label"><i class="fas fa-user-nurse"></i> 操作员</div><div class="info-value" id="opVal"></div></div>
+                    </div>
+                    <div class="qr-area">
+                        <div><i class="fas fa-qrcode"></i> 追溯二维码</div>
+                        <img id="qrCodeImg" src="#" alt="二维码">
+                    </div>
+                </div>
+                <div id="loadingBox" style="display: none; text-align: center;">
+                    <div class="loader"></div>
+                    <p><i class="fas fa-microchip"></i> AI识别中，稍等...</p>
+                </div>
+                <div id="errorBox" class="error-box" style="display: none;"></div>
+                <button id="exportBtn" class="btn btn-secondary">
+                    <i class="fas fa-file-excel"></i> 导出报表
+                </button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-shield-virus"></i> 符合《医疗废物管理条例》· 数据本地加密
+    </footer>
+</div>
+
+<script>
+
+    var imgInput = document.getElementById('imageFile');
+    var previewDiv = document.getElementById('previewArea');
+    var previewImg = document.getElementById('previewImg');
+
+    imgInput.addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                previewImg.src = ev.target.result;
+                previewDiv.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewDiv.style.display = 'none';
+        }
+    });
+
+
+    var form = document.getElementById('uploadForm');
+    var submitBtn = document.getElementById('submitBtn');
+    var emptyDiv = document.getElementById('emptyState');
+    var resultDiv = document.getElementById('resultPanel');
+    var loadingDiv = document.getElementById('loadingBox');
+    var errorDiv = document.getElementById('errorBox');
+    var exportBtn = document.getElementById('exportBtn');
+
+
+    function showError(msg) {
+        errorDiv.innerText = '⚠️ ' + msg;
+        errorDiv.style.display = 'block';
+    }
+
+
+    form.addEventListener('submit', function(ev) {
+        ev.preventDefault();
+
+        var weightInput = form.querySelector('input[name="weight"]');
+        if (!weightInput.value.trim()) {
+            showError('请输入重量');
+            return;
+        }
+        if (!imgInput.files.length) {
+            showError('请上传废物照片');
+            return;
+        }
+
+        emptyDiv.style.display = 'none';
+        resultDiv.style.display = 'none';
+        errorDiv.style.display = 'none';
+        loadingDiv.style.display = 'block';
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 识别中...';
+
+        var fd = new FormData(form);
+        fetch('/upload', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function(res) {
+            if (!res.ok) {
+                return res.json().then(function(errData) {
+                    throw new Error(errData.error || '服务器错误');
+                });
+            }
+            return res.json();
+        })
+        .then(function(data) {
+            document.getElementById('recordId').innerText = data.record_id;
+            document.getElementById('category').innerText = data.category;
+            var conf = (data.confidence * 100).toFixed(1);
+            document.getElementById('confidence').innerText = conf + '%';
+            document.getElementById('time').innerText = data.time;
+            document.getElementById('weightVal').innerText = data.weight + ' g';
+            document.getElementById('deptVal').innerText = data.department;
+            document.getElementById('opVal').innerText = data.operator;
+            document.getElementById('qrCodeImg').src = '/qrcodes/' + data.qr_file;
+            resultDiv.style.display = 'block';
+        })
+        .catch(function(err) {
+            showError(err.message);
+            emptyDiv.style.display = 'block';
+        })
+        .finally(function() {
+            loadingDiv.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-brain"></i> 智能识别并记录';
+        });
+    });
+
+
+    exportBtn.onclick = function() {
+        window.location.href = '/export';
+    };
+
+
+    function legacyCheck() {
+        console.log("legacy function, do nothing");
+    }
+</script>
+</body>
+</html>

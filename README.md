@@ -172,9 +172,7 @@ for r in results:
 - Excel 文件 `medical_waste_records.xlsx` 会自动创建，但请不要在用 Excel 打开时运行程序，以免文件锁定导致写入失败。
 - 生产环境部署时，建议关闭 Flask 的 `debug` 模式，并使用 Gunicorn 或 Waitress 等 WSGI 服务器。
 
-## 项目截图
 
-> 可在此处添加项目界面截图，例如上传页面、识别结果页面、二维码展示等。
 
 ## 许可证
 
